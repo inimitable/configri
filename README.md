@@ -1,4 +1,4 @@
-# configri
+# Configri
 A cross-platform configuration management framework.
 
 ## Installation
