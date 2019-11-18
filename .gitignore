@@ -195,5 +195,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-/configri/test/config.json
-/configri/test/config.toml
+/tests/config.json
+/tests/config.toml
