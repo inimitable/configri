@@ -2,11 +2,11 @@
 # -*- coding: UTF-8 -*-
 """"""
 
-from backends.base import ConfigBackendBase
+from configri.backends import ConfigBackendBase
 from configparser import ConfigParser
 
-class INIBackend(ConfigBackendBase):
 
+class INIBackend(ConfigBackendBase):
     def __init__(self, source, defaults=None):
         self.defaults = defaults
         self.data = dict()

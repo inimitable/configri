@@ -1,20 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """"""
-from backends.base import ConfigBackendBase
-from json import loads, dumps
+from collections import OrderedDict
+from logging import getLogger
+from configri.backends.base import ConfigBackendBase
+from json import loads, dumps, JSONDecodeError
+
+logger = getLogger(__name__)
 
 
 class JSONBackend(ConfigBackendBase):
     """Provides a ConfigBackend for JSON files."""
+
+    backend_type = "json"
 
     def __init__(self, source):
         super().__init__(source)
 
     def load(self):
         """Loads data from the source file."""
-        with open(self.source, 'r') as f:
-            return loads(f.read())
+
+        with open(self.source, "r") as f:
+            data = f.read()
+            if data:
+                return loads(data)
+            else:
+                return OrderedDict()
 
     def load_or_create(self, data=None):
         """Loads the source file, creating a default file if necessary.
@@ -28,7 +39,12 @@ class JSONBackend(ConfigBackendBase):
 
         try:
             return self.load(), False
-        except FileNotFoundError:
+
+        except (FileNotFoundError, JSONDecodeError) as e:
+            logger.warning(
+                "Encountered error %s during loading, creating from scratch"
+                % e.__class__
+            )
             self.create(data)
             return data, True
 
@@ -39,5 +55,6 @@ class JSONBackend(ConfigBackendBase):
         self.source = source
 
     def create(self, data):
-        with open(self.source, 'w') as f:
+        with open(self.source, "w") as f:
             f.write(dumps(data, indent=2))
+        return data
