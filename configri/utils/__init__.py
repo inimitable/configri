@@ -10,8 +10,9 @@ from collections import namedtuple as NamedTuple  # sue me
 
 # Used as a default like None, but in cases where None is a good value to use
 #  in real life
-NO_VALUE = (None,)
-
+class __NO_VALUE:
+    pass
+NO_VALUE = __NO_VALUE()
 
 def expand(path: str) -> Pypath:
     """`expand` resolves variables in a pathname."""
